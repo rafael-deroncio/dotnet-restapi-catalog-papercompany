@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Settings/" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PapperCompany.Catalog.Core\PapperCompany.Catalog.Core.csproj" />
   </ItemGroup>
 

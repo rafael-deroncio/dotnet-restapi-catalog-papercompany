@@ -18,11 +18,34 @@ builder.Services.AddVersioning(builder.Configuration);
 // Add Custom Swagger e UI
 builder.Services.AddSwagger(builder.Configuration);
 
+// Add Custom Swagger Auth with JWT Bearer
+builder.Services.AddSwaggerJwtBearer(builder.Configuration);
+
+// Add URLs lowercase
+builder.Services.AddLowerCaseRouting();
+
+// Add Services DI
+builder.Services.AddServices();
+
+// Add Repositories DI
+builder.Services.AddRepositories();
+
+// Add Custom config auth
+builder.Services.AddAuthentication(builder.Configuration);
+
+builder.Services.AddAuthorization();
+
 WebApplication app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
 app.UseCors();
+
+app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseApiVersioning();
 

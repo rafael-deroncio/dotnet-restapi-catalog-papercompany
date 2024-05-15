@@ -15,6 +15,9 @@ builder.Services.AddCors(builder.Configuration);
 // Add Custom API Versioning
 builder.Services.AddVersioning(builder.Configuration);
 
+// Add Custom Swagger e UI
+builder.Services.AddSwagger(builder.Configuration);
+
 WebApplication app = builder.Build();
 
 app.UseSerilogRequestLogging();
@@ -22,5 +25,7 @@ app.UseSerilogRequestLogging();
 app.UseCors();
 
 app.UseApiVersioning();
+
+app.UseSwagger(builder.Configuration);
 
 app.Run();

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Versioning;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.OpenApi.Models;
 using PapperCompany.Catalog.API.Settings;
 
 namespace PapperCompany.Catalog.API.Extensions;
@@ -61,6 +63,34 @@ public static class ServiceCollectionExtensions
 
             // Substitute the API version in URLs
             setup.SubstituteApiVersionInUrl = true;
+        });
+
+        return services;
+    }
+
+    public static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Load SwaggerGenDocSettings from appsettings.json
+        SwaggerSettings swaggerSettings = configuration.GetSection("SwaggerSettings").Get<SwaggerSettings>()
+            ?? throw new NullReferenceException("No settings for swagger documentation were found.");
+
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc(swaggerSettings.Name, new OpenApiInfo
+            {
+                Title = swaggerSettings.Title,
+                Version = swaggerSettings.Version,
+                Description = swaggerSettings.Description,
+                Contact = new OpenApiContact
+                {
+                    Name = swaggerSettings.Contact.Name,
+                    Email = swaggerSettings.Contact.Email,
+                    Url = new Uri(swaggerSettings.Contact.Url)
+                }
+            });
+
+            //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
 
         return services;

@@ -1,5 +1,4 @@
-﻿using PapperCompany.Catalog.API.Configurations;
-using PapperCompany.Catalog.API.Settings;
+﻿using PapperCompany.Catalog.Core.Configurations.Secrets;
 
 namespace PapperCompany.Catalog.API.Extensions;
 
@@ -7,7 +6,9 @@ public static class ConfigurationExtensions
 {
     public static IConfigurationBuilder AddSecrets(this IConfigurationBuilder builder)
     {
-        SecretsSettings secrets = SecretsConfigurations.Get();
+        string file = "secrets.yaml";
+
+        Secrets secrets = SecretsReader.Get(file);
 
         builder.AddInMemoryCollection(new Dictionary<string, string>
         {

@@ -12,14 +12,15 @@ builder.Host.UseSerilog();
 // Add Custom Cors Policies
 builder.Services.AddCors(builder.Configuration);
 
-
+// Add Custom API Versioning
+builder.Services.AddVersioning(builder.Configuration);
 
 WebApplication app = builder.Build();
 
-// Use Requests Logging
 app.UseSerilogRequestLogging();
 
-// Use Custom Cors Policies
 app.UseCors();
+
+app.UseApiVersioning();
 
 app.Run();

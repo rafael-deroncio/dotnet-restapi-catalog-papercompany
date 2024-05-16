@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PapperCompany.Catalog.Core.Responses;
+using PapperCompany.Catalog.Core.Services.Interfaces;
 using PapperCompany.Catalog.Domain.Requests;
 using PapperCompany.Catalog.Domain.Responses;
 
@@ -10,12 +11,9 @@ namespace PapperCompany.Catalog.API.COntrollers;
 [ApiVersion("1.0")]
 [ApiController]
 [Authorize]
-public class CategoryController : Controller
+public class CategoryController(ICategoryService categoryService) : Controller
 {
-    public CategoryController()
-    {
-
-    }
+    private readonly ICategoryService _categoryService = categoryService;
 
     [HttpGet("paged")]
     [AllowAnonymous]
@@ -23,37 +21,37 @@ public class CategoryController : Controller
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetCategories([FromQuery] PaginationRequest pagination)
-        => Ok(await Task.FromResult(0));
+        => Ok(await _categoryService.GetCategories(pagination));
 
     [HttpGet("{id:int}")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(CategoryResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetCategory(int id) 
-        => Ok(await Task.FromResult(0));
+    public async Task<IActionResult> GetCategory(int id)
+        => Ok(await _categoryService.GetCategory(id));
 
     [HttpPost]
     [Authorize(Roles = "Admin, Manager")]
     [ProducesResponseType(typeof(CategoryResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PostCategory() 
-        => Ok(await Task.FromResult(0));
+    public async Task<IActionResult> PostCategory([FromBody] CategoryRequest request)
+        => Ok(await _categoryService.CreateCategory(request));
 
     [HttpPut("{id:int}")]
     [Authorize(Roles = "Admin, Manager")]
     [ProducesResponseType(typeof(CategoryResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PutCategory(int id) 
-        => Ok(await Task.FromResult(0));
+    public async Task<IActionResult> PutCategory(int id, [FromBody] CategoryRequest request)
+        => Ok(await _categoryService.UpdateCategory(id, request));
 
     [HttpDelete("{id:int}")]
     [Authorize(Roles = "Admin, Manager")]
     [ProducesResponseType(typeof(CategoryResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> DeleteCategory(int id) 
-        => Ok(await Task.FromResult(0));
+    public async Task<IActionResult> DeleteCategory(int id)
+        => Ok(await _categoryService.DeleteCategory(id));
 }

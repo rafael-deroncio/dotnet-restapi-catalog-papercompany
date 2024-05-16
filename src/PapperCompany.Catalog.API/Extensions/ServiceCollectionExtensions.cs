@@ -4,6 +4,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PapperCompany.Catalog.API.Settings;
 using Microsoft.IdentityModel.Tokens;
+using PapperCompany.Catalog.Core.Services.Interfaces;
+using PapperCompany.Catalog.Core.Services;
 
 namespace PapperCompany.Catalog.API.Extensions;
 
@@ -175,6 +177,8 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryService, CategoryService>();
         return services;
     }
 

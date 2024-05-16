@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace PapperCompany.Catalog.Domain;
+namespace PapperCompany.Catalog.Domain.Responses;
 
 public class PaginationResponse<T>
 {

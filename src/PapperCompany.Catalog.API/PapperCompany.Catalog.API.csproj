@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PapperCompany.Catalog.Core\PapperCompany.Catalog.Core.csproj" />
+    <ProjectReference Include="..\PapperCompany.Catalog.Domain\PapperCompany.Catalog.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

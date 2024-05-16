@@ -8,14 +8,14 @@ namespace PapperCompany.Catalog.Core.Middlewares;
 
 public class GlobalHandlerExceptionMiddleware
 {
-    public RequestDelegate _next;
+    private readonly RequestDelegate _next;
 
     public GlobalHandlerExceptionMiddleware(RequestDelegate next)
     {
         _next = next;
     }
 
-    public async void Handle(HttpContext context)
+    public async Task InvokeAsync(HttpContext context)
     {
         try
         {

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PapperCompany.Catalog.Domain;
-using PapperCompany.Catalog.Domain.Responses;
 
 namespace PapperCompany.Catalog.API.COntrollers;
 

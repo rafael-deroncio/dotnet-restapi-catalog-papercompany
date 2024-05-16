@@ -1,4 +1,5 @@
 ﻿using PapperCompany.Catalog.API.Settings;
+using PapperCompany.Catalog.Core.Middlewares;
 
 namespace PapperCompany.Catalog.API.Extensions;
 
@@ -22,6 +23,14 @@ public static class ApplicationBuilderExtensions
 
         builder.UseSwagger();
 
+        return builder;
+    }
+
+    public static IApplicationBuilder UseGlobalHandlerException(this IApplicationBuilder builder)
+    {
+        // Add Middleware Handler Exception Global
+        builder.UseMiddleware<GlobalHandlerExceptionMiddleware>();
+        
         return builder;
     }
 }

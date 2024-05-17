@@ -37,11 +37,15 @@ builder.Services.AddAuthorization();
 
 WebApplication app = builder.Build();
 
+app.UseHsts();
+
+app.UseHttpsRedirection();
+
 app.UseSerilogRequestLogging();
 
-app.UseCors();
-
 app.UseRouting();
+
+app.UseCors();
 
 app.UseAuthentication();
 
@@ -52,5 +56,7 @@ app.UseApiVersioning();
 app.UseSwagger(builder.Configuration);
 
 app.UseGlobalHandlerException();
+
+app.UseEndpoints(e => e.MapControllers());
 
 app.Run();

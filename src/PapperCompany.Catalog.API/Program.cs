@@ -57,6 +57,6 @@ app.UseSwagger(builder.Configuration);
 
 app.UseGlobalHandlerException();
 
-app.UseEndpoints(e => e.MapControllers());
+app.MapControllers();
 
 app.Run();

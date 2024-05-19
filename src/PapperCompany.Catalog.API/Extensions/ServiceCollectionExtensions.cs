@@ -6,6 +6,8 @@ using PapperCompany.Catalog.API.Settings;
 using Microsoft.IdentityModel.Tokens;
 using PapperCompany.Catalog.Core.Services.Interfaces;
 using PapperCompany.Catalog.Core.Services;
+using PapperCompany.Catalog.Core.Repositories;
+using PapperCompany.Catalog.Core.Repositories.Interfaces;
 
 namespace PapperCompany.Catalog.API.Extensions;
 
@@ -184,6 +186,8 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
+        services.AddSingleton<IProductRepository, ProductRepository>();
+        services.AddSingleton<ICategoryRepository, CategoryRepository>();
         return services;
     }
 }

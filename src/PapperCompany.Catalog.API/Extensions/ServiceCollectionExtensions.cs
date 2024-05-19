@@ -8,6 +8,8 @@ using PapperCompany.Catalog.Core.Services.Interfaces;
 using PapperCompany.Catalog.Core.Services;
 using PapperCompany.Catalog.Core.Repositories;
 using PapperCompany.Catalog.Core.Repositories.Interfaces;
+using PapperCompany.Catalog.Core.Configurations.Mapper.Interfaces;
+using PapperCompany.Catalog.Core.Configurations.Mapper;
 
 namespace PapperCompany.Catalog.API.Extensions;
 
@@ -188,6 +190,12 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<ICategoryRepository, CategoryRepository>();
+        return services;
+    }
+
+    public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+    {
+        services.AddSingleton<IObjectConverter, ObjectConverter>();
         return services;
     }
 }

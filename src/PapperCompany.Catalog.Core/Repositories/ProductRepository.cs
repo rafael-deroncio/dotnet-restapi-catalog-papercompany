@@ -4,8 +4,12 @@ using PapperCompany.Catalog.Core.Repositories.Interfaces;
 
 namespace PapperCompany.Catalog.Core.Repositories;
 
-public class ProductRepository(IConfiguration configuration) : BaseRepository(configuration), IProductRepository
+public class ProductRepository(
+    IConfiguration configuration,
+    ILogger<ProductRepository> logger) : BaseRepository(configuration), IProductRepository
 {
+    private readonly ILogger<ProductRepository> _logger = logger;
+
     public Task<IEnumerable<ProductModel>> GetProducts(PaginationArgument argument)
     {
         throw new NotImplementedException();

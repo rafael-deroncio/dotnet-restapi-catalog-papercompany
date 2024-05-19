@@ -4,8 +4,13 @@ using PapperCompany.Catalog.Core.Repositories.Interfaces;
 
 namespace PapperCompany.Catalog.Core.Repositories;
 
-public class CategoryRepository(IConfiguration configuration) : BaseRepository(configuration), ICategoryRepository
+public class CategoryRepository(
+    IConfiguration configuration,
+    ILogger<CategoryRepository> logger) : BaseRepository(configuration), ICategoryRepository
 {
+
+    private readonly ILogger<CategoryRepository> _logger = logger;
+
     public Task<IEnumerable<CategoryModel>> GetCategories(PaginationArgument argument)
     {
         throw new NotImplementedException();

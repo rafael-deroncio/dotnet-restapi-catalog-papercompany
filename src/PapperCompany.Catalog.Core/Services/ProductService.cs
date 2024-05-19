@@ -1,16 +1,20 @@
-﻿using PapperCompany.Catalog.Core.Services.Interfaces;
+﻿using PapperCompany.Catalog.Core.Configurations.Mapper.Interfaces;
+using PapperCompany.Catalog.Core.Repositories.Interfaces;
+using PapperCompany.Catalog.Core.Services.Interfaces;
 using PapperCompany.Catalog.Domain.Requests;
 using PapperCompany.Catalog.Domain.Responses;
 
 namespace PapperCompany.Catalog.Core.Services;
 
-public class ProductService : IProductService
+public class ProductService(
+    ILogger<ProductService> legger,
+    IObjectConverter mapper,
+    IProductRepository ProductRepository) : IProductService
 {
-    public ProductService()
-    {
-        
-    }
-    
+    private readonly ILogger<ProductService> _legger = legger;
+    private readonly IObjectConverter _mapper = mapper;
+    private readonly IProductRepository _ProductRepository = ProductRepository;
+
     public Task<ProductResponse> CreateProduct(ProductRequest request)
     {
         throw new NotImplementedException();

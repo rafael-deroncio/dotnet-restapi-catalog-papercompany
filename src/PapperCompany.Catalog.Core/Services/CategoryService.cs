@@ -1,16 +1,20 @@
-﻿using PapperCompany.Catalog.Core.Services.Interfaces;
+﻿using PapperCompany.Catalog.Core.Configurations.Mapper.Interfaces;
+using PapperCompany.Catalog.Core.Repositories.Interfaces;
+using PapperCompany.Catalog.Core.Services.Interfaces;
 using PapperCompany.Catalog.Domain.Requests;
 using PapperCompany.Catalog.Domain.Responses;
 
 namespace PapperCompany.Catalog.Core.Services;
 
-public class CategoryService : ICategoryService
+public class CategoryService(
+    ILogger<CategoryService> legger,
+    IObjectConverter mapper,
+    ICategoryRepository categoryRepository) : ICategoryService
 {
-    public CategoryService()
-    {
-        
-    }
-    
+    private readonly ILogger<CategoryService> _legger = legger;
+    private readonly IObjectConverter _mapper = mapper;
+    private readonly ICategoryRepository _categoryRepository = categoryRepository;
+
     public Task<CategoryResponse> CreateCategory(CategoryRequest request)
     {
         throw new NotImplementedException();

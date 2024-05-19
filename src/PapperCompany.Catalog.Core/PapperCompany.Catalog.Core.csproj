@@ -26,4 +26,8 @@
     <ProjectReference Include="..\PapperCompany.Catalog.Domain\PapperCompany.Catalog.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Configuraions/Mapper/Profiles/" />
+  </ItemGroup>
+
 </Project>

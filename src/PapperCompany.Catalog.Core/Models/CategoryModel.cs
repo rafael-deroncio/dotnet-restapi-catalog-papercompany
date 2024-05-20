@@ -4,5 +4,5 @@ namespace PapperCompany.Catalog.Core.Models;
 
 public class CategoryModel : CategoryDTO
 {
-
+    public List<ProductModel> Products { get; set; }
 }

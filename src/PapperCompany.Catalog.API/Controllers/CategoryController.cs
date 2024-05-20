@@ -10,7 +10,7 @@ namespace PapperCompany.Catalog.API.COntrollers;
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class CategoryController(ICategoryService categoryService) : Controller
 {
     private readonly ICategoryService _categoryService = categoryService;

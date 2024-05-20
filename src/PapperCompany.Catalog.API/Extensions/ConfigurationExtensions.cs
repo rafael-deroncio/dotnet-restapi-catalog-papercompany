@@ -12,7 +12,7 @@ public static class ConfigurationExtensions
 
         builder.AddInMemoryCollection(new Dictionary<string, string>
         {
-            {"CatalogConnectionString", secrets.CatalogConnectionString},
+            {"DBCatalogConnectionString", secrets.DBCatalogConnectionString},
             {"JwtSymmetricSecurityKey", secrets.JwtSymmetricSecurityKey},
         });
 

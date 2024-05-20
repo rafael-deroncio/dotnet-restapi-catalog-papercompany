@@ -183,6 +183,17 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IPaginationService, PaginationService>();
+
+        // Service URI
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddSingleton<IUriService, UriService>(
+            context =>
+            {
+                IHttpContextAccessor accessor = context.GetRequiredService<IHttpContextAccessor>();
+                return new UriService(accessor);
+            });
+
         return services;
     }
 

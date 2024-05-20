@@ -1,7 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
-using PapperCompany.Catalog.API.Settings;
+﻿using PapperCompany.Catalog.API.Settings;
 using PapperCompany.Catalog.Core.Middlewares;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace PapperCompany.Catalog.API.Extensions;
 

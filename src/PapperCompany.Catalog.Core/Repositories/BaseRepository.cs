@@ -10,7 +10,7 @@ public class BaseRepository(IConfiguration configuration) : IBaseRepository
 
     public IDbConnection GetConnection()
     {
-        string connectionString = _configuration["CatalogConnectionString"];
+        string connectionString = _configuration["DBCatalogConnectionString"];
         NpgsqlConnection connection = new(connectionString);
         connection.Open();
         return connection;
@@ -18,7 +18,7 @@ public class BaseRepository(IConfiguration configuration) : IBaseRepository
 
     public async Task<IDbConnection> GetConnectionAsync()
     {
-        string connectionString = _configuration["CatalogConnectionString"];
+        string connectionString = _configuration["DBCatalogConnectionString"];
         NpgsqlConnection connection = new(connectionString);
         await connection.OpenAsync();
         return connection;

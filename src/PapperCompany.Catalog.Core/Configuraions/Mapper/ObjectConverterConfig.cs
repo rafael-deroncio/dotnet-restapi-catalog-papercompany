@@ -1,15 +1,17 @@
 ﻿using AutoMapper;
+using PapperCompany.Catalog.Core.Configurations.Mapper.Profiles;
 
 namespace PapperCompany.Catalog.Core.Configurations.Mapper;
 
-public static class ObjectConverterConfig
+public class ObjectConverterConfig
 {
-    public static MapperConfiguration RegisterMappings()
+    public MapperConfiguration RegisterMappings()
     {
         return new(
             configuration =>
             {
-
+                configuration.AddProfile(new RequestToArgumentProfile());
+                configuration.AddProfile(new ModelToResponseProfile());
             });
     }
 }

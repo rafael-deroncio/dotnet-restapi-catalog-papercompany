@@ -9,7 +9,7 @@ public class ObjectConverter : IObjectConverter
 
     public ObjectConverter()
     {
-        _mapper = ObjectConverterConfig.RegisterMappings().CreateMapper();
+        _mapper = new ObjectConverterConfig().RegisterMappings().CreateMapper();
     }
 
     public T Map<T>(object source)

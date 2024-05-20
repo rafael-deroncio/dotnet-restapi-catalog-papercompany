@@ -30,22 +30,20 @@ builder.Services.AddServices();
 // Add Repositories DI
 builder.Services.AddRepositories();
 
+// Add AutoMapper DI
+builder.Services.AddAutoMapper();
+
 // Add Custom config auth
 builder.Services.AddAuthentication(builder.Configuration);
-
 builder.Services.AddAuthorization();
 
 WebApplication app = builder.Build();
 
-app.UseHsts();
-
-app.UseHttpsRedirection();
-
 app.UseSerilogRequestLogging();
 
-app.UseRouting();
-
 app.UseCors();
+
+app.UseRouting();
 
 app.UseAuthentication();
 
@@ -56,6 +54,8 @@ app.UseApiVersioning();
 app.UseSwagger(builder.Configuration);
 
 app.UseGlobalHandlerException();
+
+app.UseHttpsRedirection();
 
 app.MapControllers();
 

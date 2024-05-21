@@ -1,4 +1,5 @@
-﻿using PapperCompany.Catalog.Core.Arguments;
+﻿using System.Net;
+using PapperCompany.Catalog.Core.Arguments;
 using PapperCompany.Catalog.Core.Configurations.Mapper.Interfaces;
 using PapperCompany.Catalog.Core.Exceptions;
 using PapperCompany.Catalog.Core.Models;
@@ -6,7 +7,6 @@ using PapperCompany.Catalog.Core.Repositories.Interfaces;
 using PapperCompany.Catalog.Core.Services.Interfaces;
 using PapperCompany.Catalog.Domain.Requests;
 using PapperCompany.Catalog.Domain.Responses;
-using Serilog;
 
 namespace PapperCompany.Catalog.Core.Services;
 
@@ -23,18 +23,25 @@ public class CategoryService(
 
     public async Task<PaginationResponse<IEnumerable<CategoryResponse>>> GetCategories(PaginationRequest request)
     {
-        _logger.LogInformation("Starting Search for categories with pagination. Request: {0}", request);
+        _logger.LogInformation("Starting Search for categories with pagination. Request: {0}.", request.ToJSON());
 
         try
         {
+            // pagination argumento to repository
             PaginationArgument argument = _mapper.Map<PaginationArgument>(request);
 
+            // categories paged
             IEnumerable<CategoryModel> categories = await _categoryRepository.GetCategories(argument);
 
+            // paged response
             return await _paginationService.GetPagination(
-                request: _mapper.Map<PaginationRequest>(argument), 
+                request: _mapper.Map<PaginationRequest>(argument),
                 total: await _categoryRepository.GetTotalRecords(),
                 content: _mapper.Map<IEnumerable<CategoryResponse>>(categories));
+        }
+        catch (BaseException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
@@ -52,24 +59,163 @@ public class CategoryService(
 
     public async Task<CategoryResponse> GetCategory(int id)
     {
-        var teste = await _categoryRepository.GetCategory(id);
-        throw new NotImplementedException();
+        _logger.LogInformation("Starting Search for Category by ID: {0}, GUID: {1}.", id, Guid.NewGuid().ToString());
+
+        try
+        {
+            CategoryModel category = await _categoryRepository.Get(id);
+
+            if (category == null)
+                throw new CategoryException(
+                    title: "Category not found",
+                    message: string.Format("Category with ID {0} not found", id),
+                    code: HttpStatusCode.NotFound
+                );
+
+            return _mapper.Map<CategoryResponse>(category);
+        }
+        catch (BaseException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            throw new CategoryException(
+                title: "Category get by id error",
+                message: "The category get could not be processed at this time."
+            );
+        }
+        finally
+        {
+            _logger.LogInformation("Finishing search for category by ID.");
+        }
     }
 
-    public Task<CategoryResponse> CreateCategory(CategoryRequest request)
+    public async Task<CategoryResponse> CreateCategory(CategoryRequest request)
     {
-        throw new NotImplementedException();
+        _logger.LogInformation("Starting Create for Category with: {0}", request.ToJSON());
+
+        try
+        {
+            if (request.Name.ContainsSqlInjection() || request.Description.ContainsSqlInjection())
+                throw new CategoryException(
+                    title: "Category create error",
+                    message: "Invalid data!",
+                    code: HttpStatusCode.BadRequest
+                );
+
+            CategoryArgument argument = new()
+            {
+                Name = request.Name.ToCamelCase(),
+                Description = request.Description.Trim(),
+                Active = true,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            CategoryModel model = await _categoryRepository.CreateCategory(argument);
+
+            return _mapper.Map<CategoryResponse>(model);
+        }
+        catch (BaseException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            throw new CategoryException(
+                title: "Category create error",
+                message: "The category create could not be processed at this time."
+            );
+        }
+        finally
+        {
+            _logger.LogInformation("Finishing search for category by ID.");
+        }
     }
 
-    public Task<bool> DeleteCategory(int id)
+    public async Task<CategoryResponse> UpdateCategory(int id, CategoryRequest request)
     {
-        throw new NotImplementedException();
+        _logger.LogInformation("Starting update category with ID: {0}, request: {1}", id, request.ToJSON());
+
+        try
+        {
+            if (request.Name.ContainsSqlInjection() || request.Description.ContainsSqlInjection())
+                throw new CategoryException(
+                    title: "Category update error",
+                    message: "Invalid data!",
+                    code: HttpStatusCode.BadRequest
+                );
+
+            if (await _categoryRepository.Get(id) == null)
+                throw new CategoryException(
+                    title: "Category update error",
+                    message: string.Format("Category with ID {0} not found", id),
+                    code: HttpStatusCode.NotFound
+                );
+
+            CategoryArgument argument = new()
+            {
+                CategoryId = id,
+                Name = request.Name.ToCamelCase(),
+                Description = request.Description.Trim(),
+                UpdatedAt = DateTime.Now
+            };
+
+            CategoryModel model = await _categoryRepository.UpdateCategory(argument);
+
+            return _mapper.Map<CategoryResponse>(model);
+        }
+        catch (BaseException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            throw new CategoryException(
+                title: "Category update error",
+                message: "The category update could not be processed at this time."
+            );
+        }
+        finally
+        {
+            _logger.LogInformation("Finishing update category.");
+        }
     }
 
-
-
-    public Task<CategoryResponse> UpdateCategory(int id, CategoryRequest request)
+    public async Task<bool> DeleteCategory(int id)
     {
-        throw new NotImplementedException();
+        _logger.LogInformation("Starting delete category with ID: {0}", id);
+
+        try
+        {
+            if (await _categoryRepository.Get(id) == null)
+                throw new CategoryException(
+                    title: "Category delete error",
+                    message: string.Format("Category with ID {0} not found", id),
+                    code: HttpStatusCode.NotFound
+                );
+            
+            return await _categoryRepository.DeleteCategory(id);
+        }
+        catch (BaseException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex);
+            throw new CategoryException(
+                title: "Category delete error",
+                message: "The category delete could not be processed at this time."
+            );
+        }
+        finally
+        {
+            _logger.LogInformation("Finishing delete category with ID.");
+        }
     }
 }

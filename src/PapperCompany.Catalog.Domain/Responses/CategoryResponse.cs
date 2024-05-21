@@ -2,7 +2,7 @@
 
 namespace PapperCompany.Catalog.Domain.Responses;
 
-public class CategoryResponse
+public class CategoryResponse : Response
 {
     [JsonPropertyName("id")]
     public string CategoryId { get; set; }

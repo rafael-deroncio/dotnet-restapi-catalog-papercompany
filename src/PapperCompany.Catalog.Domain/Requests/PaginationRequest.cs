@@ -2,7 +2,7 @@
 
 namespace PapperCompany.Catalog.Domain.Requests;
 
-public class PaginationRequest
+public class PaginationRequest : Request
 {
     [JsonPropertyName("page")]
     public int Page { get; set; }

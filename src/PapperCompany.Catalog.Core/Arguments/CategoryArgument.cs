@@ -1,6 +1,7 @@
-﻿namespace PapperCompany.Catalog.Core.Arguments;
+﻿using PapperCompany.Catalog.Core.Configurations.DTOs;
 
-public class CategoryArgument
+namespace PapperCompany.Catalog.Core.Arguments;
+
+public class CategoryArgument : CategoryDTO 
 {
-
 }

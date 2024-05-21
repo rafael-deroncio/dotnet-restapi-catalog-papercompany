@@ -2,7 +2,7 @@
 
 namespace PapperCompany.Catalog.Domain.Requests;
 
-public class CategoryRequest
+public class CategoryRequest : Request
 {
     [Required(ErrorMessage = "The Name field is required.")]
     [StringLength(100, ErrorMessage = "The Name field must have a maximum of 100 characters.")]

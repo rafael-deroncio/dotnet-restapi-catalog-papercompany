@@ -110,7 +110,7 @@ public class CategoryRepository(
                             P.CREATED_AT CreatedAt,
                             P.UPDATED_AT UpdatedAt
                         FROM CATEGORIES C
-                        JOIN PRODUCTS P ON P.CATEGORY_ID = C.CATEGORY_ID AND P.ACTIVE = true
+                        LEFT JOIN PRODUCTS P ON P.CATEGORY_ID = C.CATEGORY_ID AND P.ACTIVE = true
                         WHERE C.ACTIVE = true
                         AND C.CATEGORY_ID = @Id";
 
@@ -158,9 +158,15 @@ public class CategoryRepository(
             string query = @"
                             INSERT INTO CATEGORIES (NAME, DESCRIPTION, ACTIVE, CREATED_AT, UPDATED_AT)
                             VALUES (@Name, @Description, @Active, @CreatedAt, @UpdatedAt)
-                            RETURNING CATEGORY_ID, NAME, DESCRIPTION, ACTIVE, CREATED_AT, UPDATED_AT";
+                            RETURNING 
+                                CATEGORY_ID AS CategoryId, 
+                                NAME, 
+                                DESCRIPTION, 
+                                ACTIVE, 
+                                CREATED_AT AS CreatedAt, 
+                                UPDATED_AT AS UpdatedAt";
 
-            return await connection.QueryFirstOrDefaultAsync(query, argument);
+            return await connection.QueryFirstOrDefaultAsync<CategoryModel>(query, argument);
         }
         catch (Exception ex)
         {
@@ -178,12 +184,18 @@ public class CategoryRepository(
             string query = @"
                             UPDATE CATEGORIES
                             SET NAME = @Name, 
-                                DESCRITION = @Description, 
+                                DESCRIPTION = @Description, 
                                 UPDATED_AT = @UpdatedAt
                             WHERE CATEGORY_ID = @CategoryId
-                            RETURNING CATEGORY_ID, NAME, DESCRIPTION, ACTIVE, CREATED_AT, UPDATED_AT";
+                            RETURNING 
+                                CATEGORY_ID AS CategoryId, 
+                                NAME, 
+                                DESCRIPTION, 
+                                ACTIVE, 
+                                CREATED_AT AS CreatedAt, 
+                                UPDATED_AT AS UpdatedAt";
 
-            return await connection.QueryFirstOrDefaultAsync(query, argument);
+            return await connection.QueryFirstOrDefaultAsync<CategoryModel>(query, argument);
         }
         catch (Exception ex)
         {

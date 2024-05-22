@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text.Json;
 using PapperCompany.Catalog.Core.Arguments;
 using PapperCompany.Catalog.Core.Configurations.Mapper.Interfaces;
 using PapperCompany.Catalog.Core.Exceptions;
@@ -23,7 +24,7 @@ public class CategoryService(
 
     public async Task<PaginationResponse<IEnumerable<CategoryResponse>>> GetCategories(PaginationRequest request)
     {
-        _logger.LogInformation("Starting Search for categories with pagination. Request: {0}.", request.ToJSON());
+        _logger.LogInformation("Starting Search for categories with pagination. Request: {0}.", JsonSerializer.Serialize(request));
 
         try
         {
@@ -63,7 +64,7 @@ public class CategoryService(
 
         try
         {
-            CategoryModel category = await _categoryRepository.Get(id);
+            CategoryModel category = await _categoryRepository.GetCategory(id);
 
             if (category == null)
                 throw new CategoryException(
@@ -94,7 +95,7 @@ public class CategoryService(
 
     public async Task<CategoryResponse> CreateCategory(CategoryRequest request)
     {
-        _logger.LogInformation("Starting Create for Category with: {0}", request.ToJSON());
+        _logger.LogInformation("Starting Create for Category with: {0}", JsonSerializer.Serialize(request));
 
         try
         {
@@ -138,7 +139,7 @@ public class CategoryService(
 
     public async Task<CategoryResponse> UpdateCategory(int id, CategoryRequest request)
     {
-        _logger.LogInformation("Starting update category with ID: {0}, request: {1}", id, request.ToJSON());
+        _logger.LogInformation("Starting update category with ID: {0}, request: {1}", id, JsonSerializer.Serialize(request));
 
         try
         {
@@ -149,7 +150,7 @@ public class CategoryService(
                     code: HttpStatusCode.BadRequest
                 );
 
-            if (await _categoryRepository.Get(id) == null)
+            if (await _categoryRepository.GetCategory(id) == null)
                 throw new CategoryException(
                     title: "Category update error",
                     message: string.Format("Category with ID {0} not found", id),
@@ -192,7 +193,7 @@ public class CategoryService(
 
         try
         {
-            if (await _categoryRepository.Get(id) == null)
+            if (await _categoryRepository.GetCategory(id) == null)
                 throw new CategoryException(
                     title: "Category delete error",
                     message: string.Format("Category with ID {0} not found", id),

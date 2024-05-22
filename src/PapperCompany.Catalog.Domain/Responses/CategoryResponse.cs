@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PapperCompany.Catalog.Domain.Responses;
 
-public class CategoryResponse : Response
+public class CategoryResponse
 {
     [JsonPropertyName("id")]
     public string CategoryId { get; set; }

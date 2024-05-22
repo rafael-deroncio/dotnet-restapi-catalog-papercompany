@@ -28,13 +28,10 @@ public class CategoryService(
 
         try
         {
-            // pagination argumento to repository
             PaginationArgument argument = _mapper.Map<PaginationArgument>(request);
 
-            // categories paged
             IEnumerable<CategoryModel> categories = await _categoryRepository.GetCategories(argument);
 
-            // paged response
             return await _paginationService.GetPagination(
                 request: _mapper.Map<PaginationRequest>(argument),
                 total: await _categoryRepository.GetTotalRecords(),
@@ -64,15 +61,13 @@ public class CategoryService(
 
         try
         {
-            CategoryModel category = await _categoryRepository.GetCategory(id);
-
-            if (category == null)
-                throw new CategoryException(
+            CategoryModel category = await _categoryRepository.GetCategory(id) 
+                ?? throw new CategoryException(
                     title: "Category not found",
                     message: string.Format("Category with ID {0} not found", id),
                     code: HttpStatusCode.NotFound
                 );
-
+                
             return _mapper.Map<CategoryResponse>(category);
         }
         catch (BaseException)

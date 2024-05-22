@@ -211,9 +211,9 @@ public class CategoryRepository(
         {
             using IDbConnection connection = GetConnection();
             string query = @"
-                            UPDATE CATEGORIES
-                            SET ACTIVE = false
-                            WHERE CATEGORY_ID = @Id";
+                            UPDATE CATEGORIES SET ACTIVE = false WHERE CATEGORY_ID = @Id;
+                            UPDATE PRODUCTS SET ACTIVE = false WHERE CATEGORY_ID = @Id;
+                            ";
 
             return await connection.ExecuteAsync(query, new { Id = id }) > 0;
         }

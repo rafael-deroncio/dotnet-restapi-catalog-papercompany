@@ -57,7 +57,7 @@ public class CategoryService(
 
     public async Task<CategoryResponse> GetCategory(int id)
     {
-        _logger.LogInformation("Starting Search for Category by ID: {0}, GUID: {1}.", id, Guid.NewGuid().ToString());
+        _logger.LogInformation("Starting Search for category by ID: {0}.", id);
 
         try
         {
@@ -128,7 +128,7 @@ public class CategoryService(
         }
         finally
         {
-            _logger.LogInformation("Finishing search for category by ID.");
+            _logger.LogInformation("Finishing search for category.");
         }
     }
 
@@ -211,7 +211,7 @@ public class CategoryService(
         }
         finally
         {
-            _logger.LogInformation("Finishing delete category with ID.");
+            _logger.LogInformation("Finishing delete category");
         }
     }
 }

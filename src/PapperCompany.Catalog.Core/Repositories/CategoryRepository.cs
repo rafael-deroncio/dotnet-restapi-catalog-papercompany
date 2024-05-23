@@ -144,8 +144,7 @@ public class CategoryRepository(
         }
         catch (Exception ex)
         {
-            string message = string.Format("An error occurred while fetching categories. {0}", ex.Message);
-            _logger.LogError(ex, message);
+            _logger.LogError("An error occurred while fetching categories. {0}", ex.Message);
             throw;
         }
     }
@@ -170,8 +169,7 @@ public class CategoryRepository(
         }
         catch (Exception ex)
         {
-            string message = string.Format("An error occurred while creating category.", ex.Message);
-            _logger.LogError(ex, message);
+            _logger.LogError("An error occurred while creating category. {0}", ex.Message);
             throw;
         }
     }
@@ -199,8 +197,7 @@ public class CategoryRepository(
         }
         catch (Exception ex)
         {
-            string message = string.Format("An error occurred while updating category. {0}", ex.Message);
-            _logger.LogError(ex, message);
+            _logger.LogError("An error occurred while updating category. {0}", ex.Message);
             throw;
         }
     }
@@ -219,13 +216,12 @@ public class CategoryRepository(
         }
         catch (Exception ex)
         {
-            string message = string.Format("An error occurred while deleting category.", ex.Message);
-            _logger.LogError(ex, message);
+            _logger.LogError("An error occurred while deleting category. {0}", ex.Message);
             throw;
         }
     }
 
-    public async Task<int> GetTotalRecords()
+    public override async Task<int> GetTotalRecords()
     {
         try
         {
@@ -240,7 +236,7 @@ public class CategoryRepository(
         }
         catch (Exception ex)
         {
-            _logger.LogError("An error occurred while getting total registered products. {0}", ex.Message);
+            _logger.LogError("An error occurred while getting total registered categories. {0}", ex.Message);
             throw;
         }
     }

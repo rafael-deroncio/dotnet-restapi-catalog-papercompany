@@ -4,7 +4,7 @@ using PapperCompany.Catalog.Core.Repositories.Interfaces;
 
 namespace PapperCompany.Catalog.Core;
 
-public class BaseRepository(IConfiguration configuration) : IBaseRepository
+public abstract class BaseRepository(IConfiguration configuration) : IBaseRepository
 {
     private readonly IConfiguration _configuration = configuration;
 
@@ -23,4 +23,6 @@ public class BaseRepository(IConfiguration configuration) : IBaseRepository
         await connection.OpenAsync();
         return connection;
     }
+
+    public abstract Task<int> GetTotalRecords();
 }

@@ -28,4 +28,7 @@ public class ProductRequest
     [Required(ErrorMessage = "The Stock field is required.")]
     [Range(1, 999, ErrorMessage = "The Stock must be between 1 and 999.")]
     public int Stock { get; set; }
+
+    [Required(ErrorMessage = "The Category field is required.")]
+    public int CategoryId { get; set; }
 }

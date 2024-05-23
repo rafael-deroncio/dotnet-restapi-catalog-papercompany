@@ -9,5 +9,6 @@ public interface IProductRepository
     Task<IEnumerable<ProductModel>> GetProducts(PaginationArgument argument);
     Task<ProductModel> CreateProduct(ProductArgument argument);
     Task<ProductModel> UpdateProduct(ProductArgument argument);
-    Task<ProductModel> DeleteProduct(int id);
+    Task<bool> DeleteProduct(int id);
+    Task<int> GetTotalRecords();
 }

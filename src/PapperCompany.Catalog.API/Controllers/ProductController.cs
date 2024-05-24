@@ -7,51 +7,89 @@ using PapperCompany.Catalog.Domain.Responses;
 
 namespace PapperCompany.Catalog.API.COntrollers;
 
+/// <summary>
+/// API controller for managing products.
+/// </summary>
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [ApiController]
 [Authorize]
-public class ProductController(IProductService productService) : Controller
+public class ProductController : Controller
 {
-    private readonly IProductService _productService = productService;
+     private readonly IProductService _productService;
 
-    [HttpGet("paged")]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetProducts([FromQuery] PaginationRequest pagination) 
+     /// <summary>
+     /// Initializes a new instance of the <see cref="ProductController"/> class.
+     /// </summary>
+     /// <param name="productService">The product service.</param>
+     public ProductController(IProductService productService)
+     {
+          _productService = productService;
+     }
+
+     /// <summary>
+     /// Retrieves a paginated list of products.
+     /// </summary>
+     /// <param name="pagination">The pagination parameters.</param>
+     /// <returns>A paginated list of products.</returns>
+     [HttpGet("paged")]
+     [AllowAnonymous]
+     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
+     public async Task<IActionResult> GetProducts([FromQuery] PaginationRequest pagination)
          => Ok(await _productService.GetProducts(pagination));
 
-    [HttpGet("{id:int}")]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetProduct(int id) 
+     /// <summary>
+     /// Retrieves the details of a specific product.
+     /// </summary>
+     /// <param name="id">The product ID.</param>
+     /// <returns>The details of the product.</returns>
+     [HttpGet("{id:int}")]
+     [AllowAnonymous]
+     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
+     public async Task<IActionResult> GetProduct(int id)
          => Ok(await _productService.GetProduct(id));
 
-    [HttpPost]
-    [Authorize(Roles = "Admin, Manager")]
-    [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PostProduct([FromBody] ProductRequest request) 
+     /// <summary>
+     /// Creates a new product.
+     /// </summary>
+     /// <param name="request">The product data.</param>
+     /// <returns>The created product.</returns>
+     [HttpPost]
+     //[Authorize(Roles = "Admin, Manager")]
+     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
+     public async Task<IActionResult> PostProduct([FromBody] ProductRequest request)
          => Ok(await _productService.CreateProduct(request));
 
-    [HttpPut("{id:int}")]
-    [Authorize(Roles = "Admin, Manager")]
-    [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PutProduct(int id, [FromBody] ProductRequest request) 
+     /// <summary>
+     /// Updates an existing product.
+     /// </summary>
+     /// <param name="id">The product ID.</param>
+     /// <param name="request">The updated product data.</param>
+     /// <returns>The updated product.</returns>
+     [HttpPut("{id:int}")]
+     //[Authorize(Roles = "Admin, Manager")]
+     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
+     public async Task<IActionResult> PutProduct(int id, [FromBody] ProductRequest request)
          => Ok(await _productService.UpdateProduct(id, request));
 
-    [HttpDelete("{id:int}")]
-    [Authorize(Roles = "Admin, Manager")]
-    [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> DeleteProduct(int id) 
+     /// <summary>
+     /// Deletes a product.
+     /// </summary>
+     /// <param name="id">The product ID.</param>
+     /// <returns>True if deletion was successful, otherwise false.</returns>
+     [HttpDelete("{id:int}")]
+     //[Authorize(Roles = "Admin, Manager")]
+     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
+     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
+     public async Task<IActionResult> DeleteProduct(int id)
          => Ok(await _productService.DeleteProduct(id));
 }

@@ -10,6 +10,7 @@ using PapperCompany.Catalog.Core.Repositories;
 using PapperCompany.Catalog.Core.Repositories.Interfaces;
 using PapperCompany.Catalog.Core.Configurations.Mapper.Interfaces;
 using PapperCompany.Catalog.Core.Configurations.Mapper;
+using System.Reflection;
 
 namespace PapperCompany.Catalog.API.Extensions;
 
@@ -97,8 +98,8 @@ public static class ServiceCollectionExtensions
                 }
             });
 
-            //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
 
         return services;

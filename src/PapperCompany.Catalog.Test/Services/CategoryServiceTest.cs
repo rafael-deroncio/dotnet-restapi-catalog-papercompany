@@ -1,46 +1,99 @@
-﻿namespace PapperCompany.Catalog.Test;
+﻿using PapperCompany.Catalog.Core.Services;
+using PapperCompany.Catalog.Domain.Requests;
+using PapperCompany.Catalog.Domain.Responses;
+using PapperCompany.Catalog.Test.Fistures;
+
+namespace PapperCompany.Catalog.Test;
 
 public class CategoryServiceTest
 {
     [Fact]
     public async Task MustGetCategorySuccessfully()
     {
-        await Task.FromResult(0);
+        // Arrange
+        int categoryId = 1;
+        CategoryService fixture = new CategoryServiceFixture()
+                                      .WithCategoryModel()
+                                      .InstantiateService();
+
+        // Act
+        CategoryResponse response = await fixture.GetCategory(categoryId);
+
+        // Assert
+        Assert.NotNull(response);
     }
 
     [Fact]
     public async Task MustGetCategoriesSuccessfully()
     {
-        await Task.FromResult(0);
+        // Arrange
+        PaginationRequest request = new() { Page = 2, Size = 5 };
+        CategoryService fixture = new CategoryServiceFixture()
+                                      .WithCategoryModelList()
+                                      .WithPaginationTotalRecords()
+                                      .WithPaginationResponse<CategoryResponse>()
+                                      .InstantiateService();
+
+        // Act
+        PaginationResponse<IEnumerable<CategoryResponse>> 
+            response = await fixture.GetCategories(request);
+
+        // Assert
+        Assert.NotNull(response.Data);
     }
 
     [Fact]
     public async Task MustCreateNewCategorySuccessfully()
     {
+        // Arrange
+
+        // Act
+
+        // Assert
         await Task.FromResult(0);
     }
 
     [Fact]
     public async Task MustEditCategorySuccessfully()
     {
+        // Arrange
+
+        // Act
+
+        // Assert
         await Task.FromResult(0);
     }
 
     [Fact]
     public async Task MustDeleteCategorySuccessfully()
     {
+        // Arrange
+
+        // Act
+
+        // Assert
         await Task.FromResult(0);
     }
 
     [Fact]
     public async Task MustReturnBadRequest()
     {
+        // Arrange
+
+        // Act
+
+        // Assert
         await Task.FromResult(0);
     }
 
     [Fact]
     public async Task MustReturnNotFound()
     {
+        // Arrange
+
+        // Act
+
+        // Assert
         await Task.FromResult(0);
     }
 }

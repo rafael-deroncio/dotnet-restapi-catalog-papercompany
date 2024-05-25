@@ -28,7 +28,7 @@ public class CategoryServiceFixture
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
         _logger = Substitute.For<ILogger<CategoryService>>();
-        _mapper = new ObjectConverter();
+        _mapper = Substitute.For<IObjectConverter>();
         _paginationService = Substitute.For<IPaginationService>();
         _categoryRepository = Substitute.For<ICategoryRepository>();
     }
@@ -46,24 +46,26 @@ public class CategoryServiceFixture
     public CategoryServiceFixture WithCategoryModel()
     {
         CategoryModel model = _fixture.Create<CategoryModel>();
-        _categoryRepository.GetCategory(Arg.Any<int>()).ReturnsForAnyArgs(model);
+        int id = Arg.Any<int>();
+        _categoryRepository.GetCategory(id).ReturnsForAnyArgs(model);
         return this;
     }
 
     public CategoryServiceFixture WithCategoryModelList()
     {
         IEnumerable<CategoryModel> models = _fixture.CreateMany<CategoryModel>();
-        _categoryRepository.GetCategories(Arg.Any<PaginationArgument>()).ReturnsForAnyArgs(models);
+        PaginationArgument argument = Arg.Any<PaginationArgument>();
+        _categoryRepository.GetCategories(argument).ReturnsForAnyArgs(models);
         return this;
     }
 
-    public CategoryServiceFixture WithPaginationResponse<T>()
+    public CategoryServiceFixture WithPaginationResponse()
     {
-        PaginationResponse<T> response = _fixture.Create<PaginationResponse<T>>();
-        _paginationService.GetPagination<T>(
-            Arg.Any<PaginationRequest>(), 
-            Arg.Any<int>(), 
-            Arg.Any<T>()).Returns(response);
+        PaginationResponse<IEnumerable<CategoryResponse>> response = _fixture.Create<PaginationResponse<IEnumerable<CategoryResponse>>>();
+        PaginationRequest request = Arg.Any<PaginationRequest>();
+        int total = Arg.Any<int>();
+        IEnumerable<CategoryResponse> content = Arg.Any<IEnumerable<CategoryResponse>>();
+        _paginationService.GetPagination(request, total, content).Returns(response);
         return this;
     }
 
@@ -73,4 +75,39 @@ public class CategoryServiceFixture
         _categoryRepository.GetTotalRecords().Returns(total);
         return this;
     }
+
+    #region Mappers
+    public CategoryServiceFixture WithMapModelToArgument()
+    {
+        CategoryResponse response = _fixture.Create<CategoryResponse>();
+        CategoryModel model = Arg.Any<CategoryModel>();
+        _mapper.Map<CategoryResponse>(model).Returns(response);
+        return this;
+    }
+
+    public CategoryServiceFixture WithMapRequestToArgument()
+    {
+        PaginationArgument argument = _fixture.Create<PaginationArgument>();
+        PaginationRequest request = Arg.Any<PaginationRequest>();
+        _mapper.Map<PaginationArgument>(request).Returns(argument);
+        return this;
+    }
+
+    public CategoryServiceFixture WithMapArgumentToRequest()
+    {
+        var request = _fixture.Create<PaginationRequest>();
+        var argument = Arg.Any<PaginationArgument>();
+        _mapper.Map<PaginationRequest>(argument).Returns(request);
+        return this;
+    }
+
+    public CategoryServiceFixture WithMapModelToResponseList()
+    {
+        IEnumerable<CategoryModel> models = Arg.Any<IEnumerable<CategoryModel>>(); 
+        IEnumerable<CategoryResponse> reponses = _fixture.CreateMany<CategoryResponse>();
+        _mapper.Map<IEnumerable<CategoryResponse>>(models).Returns(reponses);
+        return this;
+    }
+
+    #endregion
 }

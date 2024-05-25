@@ -14,6 +14,7 @@ public class CategoryServiceTest
         int categoryId = 1;
         CategoryService fixture = new CategoryServiceFixture()
                                       .WithCategoryModel()
+                                      .WithMapModelToArgument()
                                       .InstantiateService();
 
         // Act
@@ -29,9 +30,12 @@ public class CategoryServiceTest
         // Arrange
         PaginationRequest request = new() { Page = 2, Size = 5 };
         CategoryService fixture = new CategoryServiceFixture()
+                                      .WithMapRequestToArgument()
                                       .WithCategoryModelList()
+                                      .WithMapArgumentToRequest()
                                       .WithPaginationTotalRecords()
-                                      .WithPaginationResponse<CategoryResponse>()
+                                      .WithMapModelToResponseList()
+                                      .WithPaginationResponse()
                                       .InstantiateService();
 
         // Act

@@ -32,10 +32,15 @@ public class CategoryService(
 
             IEnumerable<CategoryModel> categories = await _categoryRepository.GetCategories(argument);
 
+            var pRequest = _mapper.Map<PaginationRequest>(argument);
+            var pTotal = await _categoryRepository.GetTotalRecords();
+            var pContent = _mapper.Map<IEnumerable<CategoryResponse>>(categories);
+            var log = pContent.ToList();
             return await _paginationService.GetPagination(
-                request: _mapper.Map<PaginationRequest>(argument),
-                total: await _categoryRepository.GetTotalRecords(),
-                content: _mapper.Map<IEnumerable<CategoryResponse>>(categories));
+                request: pRequest,
+                total: pTotal,
+                content: pContent
+                );
         }
         catch (BaseException)
         {
@@ -61,13 +66,13 @@ public class CategoryService(
 
         try
         {
-            CategoryModel category = await _categoryRepository.GetCategory(id) 
+            CategoryModel category = await _categoryRepository.GetCategory(id)
                 ?? throw new CategoryException(
                     title: "Category not found",
                     message: string.Format("Category with ID {0} not found", id),
                     code: HttpStatusCode.NotFound
                 );
-                
+
             return _mapper.Map<CategoryResponse>(category);
         }
         catch (BaseException)
@@ -194,7 +199,7 @@ public class CategoryService(
                     message: string.Format("Category with ID {0} not found", id),
                     code: HttpStatusCode.NotFound
                 );
-            
+
             return await _categoryRepository.DeleteCategory(id);
         }
         catch (BaseException)

@@ -13,7 +13,7 @@ public class CategoryServiceTest
         // Arrange
         int categoryId = 1;
         CategoryService fixture = new CategoryServiceFixture()
-                                      .WithCategoryModel()
+                                      .WithGetCategoryModel()
                                       .WithMapModelToArgument()
                                       .InstantiateService();
 
@@ -50,54 +50,71 @@ public class CategoryServiceTest
     public async Task MustCreateNewCategorySuccessfully()
     {
         // Arrange
+        CategoryServiceFixture fixture = new();
+        CategoryRequest request = fixture.CategoryRequestMock();
+        CategoryService service = fixture.WithCreateCategoryModel()
+                                         .WithMapModelToResponse()
+                                         .InstantiateService();
 
         // Act
+        CategoryResponse response = await service.CreateCategory(request);
 
         // Assert
-        await Task.FromResult(0);
+        Assert.NotNull(response);
     }
 
     [Fact]
     public async Task MustEditCategorySuccessfully()
     {
         // Arrange
+        CategoryServiceFixture fixture = new();
+        int id = 1;
+        CategoryRequest request = fixture.CategoryRequestMock();
+        CategoryService service = fixture.WithUpdateCategoryModel()
+                                         .WithGetCategoryModel()
+                                         .WithMapModelToResponse()
+                                         .InstantiateService();
 
         // Act
+        CategoryResponse response = await service.UpdateCategory(id, request);
 
         // Assert
-        await Task.FromResult(0);
+        Assert.NotNull(response);
     }
 
     [Fact]
-    public async Task MustDeleteCategorySuccessfully()
+    public async Task MustDeleteCategoryIsTrue()
     {
         // Arrange
+        int id = 1;
+        bool result = true;
+        CategoryService service = new CategoryServiceFixture()
+                                         .WithDeleteCategoryModel(result)
+                                         .WithGetCategoryModel()
+                                         .InstantiateService();
 
         // Act
+        bool response = await service.DeleteCategory(id);
 
         // Assert
-        await Task.FromResult(0);
+        Assert.True(response);
     }
 
     [Fact]
-    public async Task MustReturnBadRequest()
+    public async Task MustDeleteCategoryIsFalse()
     {
         // Arrange
+        int id = 1;
+        bool result = false;
+        CategoryService service = new CategoryServiceFixture()
+                                         .WithDeleteCategoryModel(result)
+                                         .WithGetCategoryModel()
+                                         .InstantiateService();
 
         // Act
+        bool response = await service.DeleteCategory(id);
 
         // Assert
-        await Task.FromResult(0);
-    }
-
-    [Fact]
-    public async Task MustReturnNotFound()
-    {
-        // Arrange
-
-        // Act
-
-        // Assert
-        await Task.FromResult(0);
+        Assert.False(response);
     }
 }

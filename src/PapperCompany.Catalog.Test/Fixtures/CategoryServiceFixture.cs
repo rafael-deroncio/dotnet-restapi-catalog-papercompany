@@ -43,11 +43,35 @@ public class CategoryServiceFixture
             );
     }
 
-    public CategoryServiceFixture WithCategoryModel()
+    public CategoryServiceFixture WithGetCategoryModel()
     {
         CategoryModel model = _fixture.Create<CategoryModel>();
         int id = Arg.Any<int>();
         _categoryRepository.GetCategory(id).ReturnsForAnyArgs(model);
+        return this;
+    }
+
+    public CategoryServiceFixture WithCreateCategoryModel()
+    {
+        CategoryModel model = _fixture.Create<CategoryModel>();
+        CategoryArgument argument = Arg.Any<CategoryArgument>();
+        _categoryRepository.CreateCategory(argument).ReturnsForAnyArgs(model);
+        return this;
+    }
+
+    public CategoryServiceFixture WithUpdateCategoryModel()
+    {
+        CategoryModel model = _fixture.Create<CategoryModel>();
+        CategoryArgument argument = Arg.Any<CategoryArgument>();
+        _categoryRepository.UpdateCategory(argument).ReturnsForAnyArgs(model);
+        return this;
+    }
+
+    public CategoryServiceFixture WithDeleteCategoryModel(bool ?result)
+    {
+        result = result == null ? _fixture.Create<bool>() : result;
+        int id = Arg.Any<int>();
+        _categoryRepository.DeleteCategory(id).ReturnsForAnyArgs(result.Value);
         return this;
     }
 
@@ -101,6 +125,14 @@ public class CategoryServiceFixture
         return this;
     }
 
+    public CategoryServiceFixture WithMapModelToResponse()
+    {
+        CategoryModel model = Arg.Any<CategoryModel>(); 
+        CategoryResponse reponse = _fixture.Create<CategoryResponse>();
+        _mapper.Map<CategoryResponse>(model).Returns(reponse);
+        return this;
+    }
+
     public CategoryServiceFixture WithMapModelToResponseList()
     {
         IEnumerable<CategoryModel> models = Arg.Any<IEnumerable<CategoryModel>>(); 
@@ -109,5 +141,12 @@ public class CategoryServiceFixture
         return this;
     }
 
+    #endregion
+
+    #region Mocks
+    public CategoryRequest CategoryRequestMock()
+    {
+        return _fixture.Create<CategoryRequest>();
+    } 
     #endregion
 }

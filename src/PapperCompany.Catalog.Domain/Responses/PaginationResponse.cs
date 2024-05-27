@@ -69,5 +69,5 @@ public class PaginationResponse<T>
     /// This property maps to the JSON property 'data'.
     /// </summary>
     [JsonPropertyName("data")]
-    public T Data { get; set; }
+    public IEnumerable<T> Data { get; set; }
 }

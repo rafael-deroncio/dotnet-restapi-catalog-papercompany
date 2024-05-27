@@ -20,7 +20,7 @@ public interface IProductService
     /// </summary>
     /// <param name="request">The pagination request containing page number and page size.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a paginated response of product details.</returns>
-    Task<PaginationResponse<IEnumerable<ProductResponse>>> GetProducts(PaginationRequest request);
+    Task<PaginationResponse<ProductResponse>> GetProducts(PaginationRequest request);
 
     /// <summary>
     /// Creates a new product based on the provided request.

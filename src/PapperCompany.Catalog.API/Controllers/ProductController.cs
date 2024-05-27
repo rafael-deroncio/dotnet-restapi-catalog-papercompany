@@ -34,7 +34,7 @@ public class ProductController : Controller
      /// <returns>A paginated list of products.</returns>
      [HttpGet("paged")]
      [AllowAnonymous]
-     [ProducesResponseType(typeof(ProductResponse), StatusCodes.Status200OK)]
+     [ProducesResponseType(typeof(PaginationResponse<ProductResponse>), StatusCodes.Status200OK)]
      [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
      [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
      public async Task<IActionResult> GetProducts([FromQuery] PaginationRequest pagination)

@@ -16,5 +16,5 @@ public interface IPaginationService
     /// <param name="total">The total number of records available.</param>
     /// <param name="content">The content to be included in the paginated response.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the paginated response.</returns>
-    Task<PaginationResponse<T>> GetPagination<T>(PaginationRequest request, int total, T content);
+    Task<PaginationResponse<T>> GetPagination<T>(PaginationRequest request, int total, IEnumerable<T> content);
 }

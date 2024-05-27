@@ -9,7 +9,7 @@ public class PaginationService(IUriService uriService) : IPaginationService
 {
     private readonly IUriService _uriService = uriService;
 
-    public async Task<PaginationResponse<T>> GetPagination<T>(PaginationRequest request, int total, T content)
+    public async Task<PaginationResponse<T>> GetPagination<T>(PaginationRequest request, int total, IEnumerable<T> content)
     {
         Uri endpoint = _uriService.GetEndpoint();
         PaginationResponse<T> response = new()

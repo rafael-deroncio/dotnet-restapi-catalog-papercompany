@@ -29,7 +29,7 @@ public class CategoryController(ICategoryService categoryService) : Controller
     /// <returns>A paginated list of categories.</returns>
     [HttpGet("paged")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(CategoryResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationResponse<CategoryResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetCategories([FromQuery] PaginationRequest pagination)

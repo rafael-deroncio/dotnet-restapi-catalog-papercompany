@@ -20,7 +20,7 @@ public interface ICategoryService
     /// </summary>
     /// <param name="request">The pagination request containing page number and page size.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a paginated response of category details.</returns>
-    Task<PaginationResponse<IEnumerable<CategoryResponse>>> GetCategories(PaginationRequest request);
+    Task<PaginationResponse<CategoryResponse>> GetCategories(PaginationRequest request);
 
     /// <summary>
     /// Creates a new category based on the provided request.

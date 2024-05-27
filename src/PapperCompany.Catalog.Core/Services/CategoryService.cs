@@ -22,7 +22,7 @@ public class CategoryService(
     private readonly IPaginationService _paginationService = paginationService;
     private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
-    public async Task<PaginationResponse<IEnumerable<CategoryResponse>>> GetCategories(PaginationRequest request)
+    public async Task<PaginationResponse<CategoryResponse>> GetCategories(PaginationRequest request)
     {
         _logger.LogInformation("Starting Search for categories with pagination. Request: {0}.", JsonSerializer.Serialize(request));
 
@@ -32,14 +32,10 @@ public class CategoryService(
 
             IEnumerable<CategoryModel> categories = await _categoryRepository.GetCategories(argument);
 
-            var pRequest = _mapper.Map<PaginationRequest>(argument);
-            var pTotal = await _categoryRepository.GetTotalRecords();
-            var pContent = _mapper.Map<IEnumerable<CategoryResponse>>(categories);
-            var log = pContent.ToList();
-            return await _paginationService.GetPagination(
-                request: pRequest,
-                total: pTotal,
-                content: pContent
+            return await _paginationService.GetPagination<CategoryResponse>(
+                request: _mapper.Map<PaginationRequest>(argument),
+                total: await _categoryRepository.GetTotalRecords(),
+                content: _mapper.Map<IEnumerable<CategoryResponse>>(categories)
                 );
         }
         catch (BaseException)

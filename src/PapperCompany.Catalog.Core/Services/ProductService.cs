@@ -24,7 +24,7 @@ public class ProductService(
     private readonly IPaginationService _paginationService = paginationService;
     private readonly IProductRepository _productRepository = productRepository;
 
-    public async Task<PaginationResponse<IEnumerable<ProductResponse>>> GetProducts(PaginationRequest request)
+    public async Task<PaginationResponse<ProductResponse>> GetProducts(PaginationRequest request)
     {
         _logger.LogInformation("Starting search for products with pagination. Request: {0}.", JsonSerializer.Serialize(request));
 

@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using NSubstitute.Core.Arguments;
 using PapperCompany.Catalog.Core.Arguments;
 using PapperCompany.Catalog.Core.Configurations.Mapper;
 using PapperCompany.Catalog.Core.Configurations.Mapper.Interfaces;
@@ -43,60 +44,59 @@ public class CategoryServiceFixture
             );
     }
 
-    public CategoryServiceFixture WithGetCategoryModel()
+    public CategoryServiceFixture WithGetCategory(int? id = null, bool success = true)
     {
-        CategoryModel model = _fixture.Create<CategoryModel>();
-        int id = Arg.Any<int>();
-        _categoryRepository.GetCategory(id).ReturnsForAnyArgs(model);
+        id ??= Arg.Any<int>();
+        CategoryModel? model = success ? _fixture.Create<CategoryModel>() : null;
+        _categoryRepository.GetCategory(id.Value).Returns(model);
         return this;
     }
 
-    public CategoryServiceFixture WithCreateCategoryModel()
+    public CategoryServiceFixture WithGetCategories()
     {
-        CategoryModel model = _fixture.Create<CategoryModel>();
-        CategoryArgument argument = Arg.Any<CategoryArgument>();
-        _categoryRepository.CreateCategory(argument).ReturnsForAnyArgs(model);
-        return this;
-    }
-
-    public CategoryServiceFixture WithUpdateCategoryModel()
-    {
-        CategoryModel model = _fixture.Create<CategoryModel>();
-        CategoryArgument argument = Arg.Any<CategoryArgument>();
-        _categoryRepository.UpdateCategory(argument).ReturnsForAnyArgs(model);
-        return this;
-    }
-
-    public CategoryServiceFixture WithDeleteCategoryModel(bool ?result)
-    {
-        result = result == null ? _fixture.Create<bool>() : result;
-        int id = Arg.Any<int>();
-        _categoryRepository.DeleteCategory(id).ReturnsForAnyArgs(result.Value);
-        return this;
-    }
-
-    public CategoryServiceFixture WithCategoryModelList()
-    {
-        IEnumerable<CategoryModel> models = _fixture.CreateMany<CategoryModel>();
         PaginationArgument argument = Arg.Any<PaginationArgument>();
-        _categoryRepository.GetCategories(argument).ReturnsForAnyArgs(models);
+        IEnumerable<CategoryModel> models = _fixture.CreateMany<CategoryModel>();
+        _categoryRepository.GetCategories(argument).Returns(models);
         return this;
     }
 
-    public CategoryServiceFixture WithPaginationResponse()
+    public CategoryServiceFixture WithGetPagination()
     {
-        PaginationResponse<IEnumerable<CategoryResponse>> response = _fixture.Create<PaginationResponse<IEnumerable<CategoryResponse>>>();
         PaginationRequest request = Arg.Any<PaginationRequest>();
         int total = Arg.Any<int>();
         IEnumerable<CategoryResponse> content = Arg.Any<IEnumerable<CategoryResponse>>();
+        PaginationResponse<CategoryResponse> response = _fixture.Create<PaginationResponse<CategoryResponse>>();
         _paginationService.GetPagination(request, total, content).Returns(response);
         return this;
     }
 
-    public CategoryServiceFixture WithPaginationTotalRecords(int records = 0)
+    public CategoryServiceFixture WithGetTotalRecords()
     {
-        int total = records == 0 ? _fixture.Create<int>() : records;
+        int total = _fixture.Create<int>();
         _categoryRepository.GetTotalRecords().Returns(total);
+        return this;
+    }
+
+    public CategoryServiceFixture WithCreateCategory()
+    {
+        CategoryArgument argument = Arg.Any<CategoryArgument>();
+        CategoryModel model = _fixture.Create<CategoryModel>();
+        _categoryRepository.CreateCategory(argument).Returns(model);
+        return this;
+    }
+
+    public CategoryServiceFixture WithUpdateCategory()
+    {
+        CategoryArgument argument = Arg.Any<CategoryArgument>();
+        CategoryModel model = _fixture.Create<CategoryModel>();
+        _categoryRepository.UpdateCategory(argument).Returns(model);
+        return this;
+    }
+
+    public CategoryServiceFixture WithDeleteCategory(bool result = true)
+    {
+        int id = Arg.Any<int>();
+        _categoryRepository.DeleteCategory(id).Returns(result);
         return this;
     }
 
@@ -127,7 +127,7 @@ public class CategoryServiceFixture
 
     public CategoryServiceFixture WithMapModelToResponse()
     {
-        CategoryModel model = Arg.Any<CategoryModel>(); 
+        CategoryModel model = Arg.Any<CategoryModel>();
         CategoryResponse reponse = _fixture.Create<CategoryResponse>();
         _mapper.Map<CategoryResponse>(model).Returns(reponse);
         return this;
@@ -135,7 +135,7 @@ public class CategoryServiceFixture
 
     public CategoryServiceFixture WithMapModelToResponseList()
     {
-        IEnumerable<CategoryModel> models = Arg.Any<IEnumerable<CategoryModel>>(); 
+        IEnumerable<CategoryModel> models = Arg.Any<IEnumerable<CategoryModel>>();
         IEnumerable<CategoryResponse> reponses = _fixture.CreateMany<CategoryResponse>();
         _mapper.Map<IEnumerable<CategoryResponse>>(models).Returns(reponses);
         return this;
@@ -144,9 +144,17 @@ public class CategoryServiceFixture
     #endregion
 
     #region Mocks
-    public CategoryRequest CategoryRequestMock()
+    public CategoryRequest CategoryRequestMock(string name = "", string description = "")
     {
-        return _fixture.Create<CategoryRequest>();
-    } 
+        var category = _fixture.Create<CategoryRequest>();
+        category.Name = string.IsNullOrEmpty(name) ? category.Name : name;
+        category.Description = string.IsNullOrEmpty(description) ? category.Description : description;
+        return category;
+    }
+
+    public PaginationRequest PaginationRequestMock()
+    {
+        return _fixture.Create<PaginationRequest>();
+    }
     #endregion
 }

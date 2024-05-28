@@ -3,7 +3,7 @@
 public class ProductServiceTest
 {
     [Fact]
-    public async Task MustGetCategorySuccessfully()
+    public async Task MustGetProductSuccessfully()
     {
         // Arrange
 

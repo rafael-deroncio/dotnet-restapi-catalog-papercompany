@@ -1,9 +1,7 @@
 ﻿using AutoFixture;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using NSubstitute.Core.Arguments;
 using PapperCompany.Catalog.Core.Arguments;
-using PapperCompany.Catalog.Core.Configurations.Mapper;
 using PapperCompany.Catalog.Core.Configurations.Mapper.Interfaces;
 using PapperCompany.Catalog.Core.Models;
 using PapperCompany.Catalog.Core.Repositories.Interfaces;

@@ -1,12 +1,11 @@
 ﻿using System.Net;
-using Microsoft.AspNetCore.Http;
 using PapperCompany.Catalog.Core.Exceptions;
 using PapperCompany.Catalog.Core.Services;
 using PapperCompany.Catalog.Domain.Requests;
 using PapperCompany.Catalog.Domain.Responses;
 using PapperCompany.Catalog.Test.Fistures;
 
-namespace PapperCompany.Catalog.Test;
+namespace PapperCompany.Catalog.Test.Services;
 
 public class CategoryServiceTest
 {

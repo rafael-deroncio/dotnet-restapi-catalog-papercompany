@@ -1,4 +1,11 @@
-﻿namespace PapperCompany.Catalog.Test.Services;
+﻿using System.Net;
+using PapperCompany.Catalog.Core.Exceptions;
+using PapperCompany.Catalog.Core.Services;
+using PapperCompany.Catalog.Domain.Requests;
+using PapperCompany.Catalog.Domain.Responses;
+using PapperCompany.Catalog.Test.Fistures;
+
+namespace PapperCompany.Catalog.Test.Services;
 
 public class ProductServiceTest
 {
@@ -6,33 +13,65 @@ public class ProductServiceTest
     public async Task MustGetProductSuccessfully()
     {
         // Arrange
+        int id = 1;
+        bool success = true;
+        ProductService fixture = new ProductServiceFixture()
+                                      .WithGetProduct(id, success)
+                                      .WithMapModelToResponse()
+                                      .InstantiateService();
 
         // Act
+        ProductResponse response = await fixture.GetProduct(id);
 
         // Assert
-        Assert.True(true);
+        Assert.NotNull(response);
     }
 
     [Fact]
-    public async Task MustGetCategoryAndReturnNotFound()
+    public async Task MustGetProductAndReturnNotFound()
     {
         // Arrange
+        int id = 1;
+        bool success = false;
+        string message = string.Format("Product with ID {0} not found", id);
+        ProductService fixture = new ProductServiceFixture()
+                                      .WithGetProduct(id, success)
+                                      .WithMapModelToResponse()
+                                      .InstantiateService();
 
         // Act
+        ProductException exception = await Assert.ThrowsAsync<ProductException>(async () =>
+        {
+            await fixture.GetProduct(id);
+        });
 
         // Assert
-        Assert.True(true);
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(HttpStatusCode.NotFound, exception.Code);
     }
 
     [Fact]
-    public async Task MustGetCategoriesSuccessfully()
+    public async Task MustGetProductsSuccessfully()
     {
         // Arrange
+        ProductServiceFixture fixture = new ProductServiceFixture();
+        PaginationRequest request = fixture.PaginationRequestMock();
+        ProductService service = fixture.WithGetProducts()
+                                         .WithGetPagination()
+                                         .WithGetTotalRecords()
+                                         .WithMapRequestToArgument()
+                                         .WithMapArgumentToRequest()
+                                         .WithMapModelToResponseList()
+                                         .InstantiateService();
 
         // Act
+        PaginationResponse<ProductResponse> response = await service.GetProducts(request);
 
         // Assert
-        Assert.True(true);
+        Assert.True(response.PageNumber > 0);
+        Assert.True(response.PageSize > 0);
+        Assert.NotNull(response.Data);
     }
 
     [Fact]

@@ -17,7 +17,7 @@ public class CategoryServiceTest
         bool success = true;
         CategoryService fixture = new CategoryServiceFixture()
                                       .WithGetCategory(id, success)
-                                      .WithMapModelToArgument()
+                                      .WithMapModelToResponse()
                                       .InstantiateService();
 
         // Act
@@ -36,7 +36,7 @@ public class CategoryServiceTest
         string message = string.Format("Category with ID {0} not found", id);
         CategoryService fixture = new CategoryServiceFixture()
                                       .WithGetCategory(id, success)
-                                      .WithMapModelToArgument()
+                                      .WithMapModelToResponse()
                                       .InstantiateService();
 
         // Act

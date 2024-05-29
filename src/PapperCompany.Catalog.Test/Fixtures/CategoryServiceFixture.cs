@@ -99,7 +99,7 @@ public class CategoryServiceFixture
     }
 
     #region Mappers
-    public CategoryServiceFixture WithMapModelToArgument()
+    public CategoryServiceFixture WithMapModelToResponse()
     {
         CategoryResponse response = _fixture.Create<CategoryResponse>();
         CategoryModel model = Arg.Any<CategoryModel>();
@@ -120,14 +120,6 @@ public class CategoryServiceFixture
         var request = _fixture.Create<PaginationRequest>();
         var argument = Arg.Any<PaginationArgument>();
         _mapper.Map<PaginationRequest>(argument).Returns(request);
-        return this;
-    }
-
-    public CategoryServiceFixture WithMapModelToResponse()
-    {
-        CategoryModel model = Arg.Any<CategoryModel>();
-        CategoryResponse reponse = _fixture.Create<CategoryResponse>();
-        _mapper.Map<CategoryResponse>(model).Returns(reponse);
         return this;
     }
 
@@ -153,6 +145,11 @@ public class CategoryServiceFixture
     public PaginationRequest PaginationRequestMock()
     {
         return _fixture.Create<PaginationRequest>();
+    }
+
+    internal object WithGetProduct(int id, bool success)
+    {
+        throw new NotImplementedException();
     }
     #endregion
 }

@@ -34,6 +34,7 @@ public class ProductServiceTest
         int id = 1;
         bool success = false;
         string message = string.Format("Product with ID {0} not found", id);
+        HttpStatusCode code = HttpStatusCode.NotFound;
         ProductService fixture = new ProductServiceFixture()
                                       .WithGetProduct(id, success)
                                       .WithMapModelToResponse()
@@ -48,7 +49,7 @@ public class ProductServiceTest
         // Assert
         Assert.NotNull(exception);
         Assert.Equal(message, exception.Message);
-        Assert.Equal(HttpStatusCode.NotFound, exception.Code);
+        Assert.Equal(code, exception.Code);
     }
 
     [Fact]
@@ -60,7 +61,7 @@ public class ProductServiceTest
         ProductService service = fixture.WithGetProducts()
                                          .WithGetPagination()
                                          .WithGetTotalRecords()
-                                         .WithMapRequestToArgument()
+                                         .WithMapPaginationRequestToArgument()
                                          .WithMapArgumentToRequest()
                                          .WithMapModelToResponseList()
                                          .InstantiateService();
@@ -75,90 +76,202 @@ public class ProductServiceTest
     }
 
     [Fact]
-    public async Task MustCreateNewCategorySuccessfully()
+    public async Task MustCreateNewProductSuccessfully()
     {
         // Arrange
+        int id = 1;
+        bool success = true;
+        ProductServiceFixture fixture = new();
+        ProductRequest request = fixture.ProductRequestMock(categoryId: id);
+        ProductService service = fixture.WithCreateProduct(id)
+                                        .WithGetCategory(id, success)
+                                        .WithMapProductRequestToArgument()
+                                        .WithMapModelToResponse()
+                                        .InstantiateService();
 
         // Act
+        ProductResponse response = await service.CreateProduct(request);
 
         // Assert
-        Assert.True(true);
+        Assert.NotNull(response);
     }
 
     [Fact]
-    public async Task MustCreateNewCategoryAndReturnBadRequest()
+    public async Task MustCreateNewProductAndReturnBadRequestCategoryNotFound()
     {
         // Arrange
+        int id = 1;
+        bool success = false;
+        string message = string.Format("Product category with ID {0} not found!", id);
+        HttpStatusCode code = HttpStatusCode.NotFound;
+        ProductServiceFixture fixture = new();
+        ProductRequest request = fixture.ProductRequestMock(categoryId: id);
+        ProductService service = fixture.WithCreateProduct(id)
+                                        .WithGetCategory(id, success)
+                                        .InstantiateService();
 
         // Act
+        ProductException exception = await Assert.ThrowsAsync<ProductException>(
+            async () => await service.CreateProduct(request)
+        );
 
         // Assert
-        Assert.True(true);
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(code, exception.Code);
     }
 
     [Fact]
-    public async Task MustEditCategorySuccessfully()
+    public async Task MustCreateNewProductAndReturnBadRequest()
     {
         // Arrange
+        int id = 1;
+        string sqlInjection = "SELECT * FROM users; --";
+        string message = "Invalid data!";
+        HttpStatusCode code = HttpStatusCode.BadRequest;
+        ProductServiceFixture fixture = new();
+        ProductRequest request = fixture.ProductRequestMock(categoryId: id, name: sqlInjection);
+        ProductService service = fixture.InstantiateService();
 
         // Act
+        ProductException exception = await Assert.ThrowsAsync<ProductException>(
+            async () => await service.CreateProduct(request)
+        );
 
         // Assert
-        Assert.True(true);
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(code, exception.Code);
     }
 
     [Fact]
-    public async Task MustEditCategoryAndReturnNotFound()
+    public async Task MustEditProductSuccessfully()
     {
         // Arrange
+        ProductServiceFixture fixture = new();
+        int id = 1;
+        bool success = true;
+        ProductRequest request = fixture.ProductRequestMock(categoryId: id);
+        ProductService service = fixture.WithGetProduct(id)
+                                        .WithGetCategory(id, success)
+                                        .WithUpdateProduct()
+                                        .WithMapProductRequestToArgument()
+                                        .WithMapModelToResponse()
+                                        .InstantiateService();
 
         // Act
+        ProductResponse response = await service.UpdateProduct(id, request);
 
         // Assert
-        Assert.True(true);
+        Assert.NotNull(response);
     }
 
     [Fact]
-    public async Task MustEditCategoryAndReturnBadRequest()
+    public async Task MustEditProductAndReturnNotFound()
     {
         // Arrange
+        int id = 1;
+        bool success = false;
+        string message = string.Format("Product with ID {0} not found!", id);
+        HttpStatusCode code = HttpStatusCode.NotFound;
+        ProductServiceFixture fixture = new();
+        ProductRequest request = fixture.ProductRequestMock(categoryId: id);
+        ProductService service = fixture.WithGetProduct(id, success)
+                                        .InstantiateService();
 
         // Act
+        ProductException exception = await Assert.ThrowsAsync<ProductException>(
+            async () => await service.UpdateProduct(id, request)
+        );
 
         // Assert
-        Assert.True(true);
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(code, exception.Code);
     }
 
     [Fact]
-    public async Task MustDeleteCategoryAndReturnTrue()
+    public async Task MustEditProductAndReturnBadRequest()
     {
         // Arrange
+        int id = 1;
+        string sqlInjection = "SELECT * FROM users; --";
+        string message = "Invalid data!";
+        HttpStatusCode code = HttpStatusCode.BadRequest;
+        ProductServiceFixture fixture = new();
+        ProductRequest request = fixture.ProductRequestMock(name: sqlInjection);
+        ProductService service = fixture.InstantiateService();
 
         // Act
+        ProductException exception = await Assert.ThrowsAsync<ProductException>(
+            async () => await service.UpdateProduct(id, request)
+        );
 
         // Assert
-        Assert.True(true);
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(code, exception.Code);
     }
 
     [Fact]
-    public async Task MustDeleteCategoryAndReturnFalse()
+    public async Task MustDeleteProductAndReturnTrue()
     {
         // Arrange
+        int id = 1;
+        bool success = true;
+        bool result = true;
+        ProductService service = new ProductServiceFixture()
+                                         .WithGetProduct(id, success)
+                                         .WithDeleteProduct(result)
+                                         .InstantiateService();
 
         // Act
+        bool response = await service.DeleteProduct(id);
 
         // Assert
-        Assert.True(true);
+        Assert.True(response);
     }
 
     [Fact]
-    public async Task MustDeleteCategoryAndReturnNotFound()
+    public async Task MustDeleteProductAndReturnFalse()
     {
         // Arrange
+        int id = 1;
+        bool success = true;
+        bool result = false;
+        ProductService service = new ProductServiceFixture()
+                                         .WithGetProduct(id, success)
+                                         .WithDeleteProduct(result)
+                                         .InstantiateService();
 
         // Act
+        bool response = await service.DeleteProduct(id);
 
         // Assert
-        Assert.True(true);
+        Assert.False(response);
+    }
+
+    [Fact]
+    public async Task MustDeleteProductAndReturnNotFound()
+    {
+        // Arrange
+        int id = 1;
+        bool success = false;
+        HttpStatusCode code = HttpStatusCode.NotFound;
+        string message = string.Format("Product with ID {0} not found!", id);
+
+        ProductService service = new ProductServiceFixture()
+                                         .WithGetCategory(id, success)
+                                         .InstantiateService();
+
+        // Act
+        ProductException exception = await Assert.ThrowsAsync<ProductException>(
+            async () => await service.DeleteProduct(id)
+        );
+
+        // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(code, exception.Code);
     }
 }

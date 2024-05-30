@@ -72,10 +72,52 @@ public class ProductServiceFixture
         return this;
     }
 
+    public ProductServiceFixture WithCreateProduct(int? id)
+    {
+        ProductArgument argument = Arg.Any<ProductArgument>();
+        ProductModel model = _fixture.Create<ProductModel>();
+
+        model.ProductId = id ??= id.Value;
+        model.Category.CategoryId = id ??= id.Value;
+
+        _productRepository.CreateProduct(argument).Returns(model);
+        return this;
+    }
+
+    public ProductServiceFixture WithGetCategory(int? id, bool success)
+    {
+        id ??= Arg.Any<int>();
+        CategoryResponse? response = null;
+
+        if (success)
+        {
+            response = _fixture.Create<CategoryResponse>();
+            response.CategoryId = id.Value;
+        }
+
+        _categoryService.GetCategory(id.Value).Returns(response);
+        return this;
+    }
+
+    public ProductServiceFixture WithUpdateProduct()
+    {
+        ProductArgument argument = Arg.Any<ProductArgument>();
+        ProductModel model = _fixture.Create<ProductModel>();
+        _productRepository.UpdateProduct(argument).Returns(model);
+        return this;
+    }
+
     public ProductServiceFixture WithGetTotalRecords()
     {
         int total = _fixture.Create<int>();
         _productRepository.GetTotalRecords().Returns(total);
+        return this;
+    }
+
+    public ProductServiceFixture WithDeleteProduct(bool result)
+    {
+        int id = Arg.Any<int>();
+        _productRepository.DeleteProduct(id).Returns(result);
         return this;
     }
     #endregion
@@ -89,11 +131,19 @@ public class ProductServiceFixture
         return this;
     }
 
-    public ProductServiceFixture WithMapRequestToArgument()
+    public ProductServiceFixture WithMapPaginationRequestToArgument()
     {
         PaginationRequest request = Arg.Any<PaginationRequest>();
         PaginationArgument argument = _fixture.Create<PaginationArgument>();
         _mapper.Map<PaginationArgument>(request).Returns(argument);
+        return this;
+    }
+
+    public ProductServiceFixture WithMapProductRequestToArgument()
+    {
+        ProductRequest request = Arg.Any<ProductRequest>();
+        ProductArgument argument = _fixture.Create<ProductArgument>();
+        _mapper.Map<ProductArgument>(request).Returns(argument);
         return this;
     }
 
@@ -118,6 +168,17 @@ public class ProductServiceFixture
     public PaginationRequest PaginationRequestMock()
     {
         return _fixture.Create<PaginationRequest>();
+    }
+
+    public ProductRequest ProductRequestMock(string name = "", string description = "", int? categoryId = null)
+    {
+        ProductRequest request = _fixture.Create<ProductRequest>();
+
+        request.Name = string.IsNullOrEmpty(name) ? request.Name : name;
+        request.Description = string.IsNullOrEmpty(description) ? request.Description : description;
+        request.CategoryId = categoryId ?? request.CategoryId;
+
+        return request;
     }
     #endregion
 }

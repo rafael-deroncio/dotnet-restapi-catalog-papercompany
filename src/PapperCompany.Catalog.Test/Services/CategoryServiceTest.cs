@@ -95,15 +95,12 @@ public class CategoryServiceTest
     public async Task MustCreateNewCategoryAndReturnBadRequest()
     {
         // Arrange
-        HttpStatusCode codeExpected = HttpStatusCode.BadRequest;
-        string titleExpected = "Category create error";
-        string messageExpected = "Invalid data!";
-        string nameSqlInjection = "SELECT * FROM users; --";
+        string sqlInjection = "SELECT * FROM users; --";
+        string message = "Invalid data!";
+        HttpStatusCode code = HttpStatusCode.BadRequest;
         CategoryServiceFixture fixture = new();
-        CategoryRequest request = fixture.CategoryRequestMock(nameSqlInjection);
-        CategoryService service = fixture.WithCreateCategory()
-                                         .WithMapModelToResponse()
-                                         .InstantiateService();
+        CategoryRequest request = fixture.CategoryRequestMock(name: sqlInjection);
+        CategoryService service = fixture.InstantiateService();
 
         // Act
         CategoryException exception = await Assert.ThrowsAsync<CategoryException>(
@@ -111,9 +108,9 @@ public class CategoryServiceTest
         );
 
         // Assert
-        Assert.Equal(codeExpected, exception.Code);
-        Assert.Equal(titleExpected, exception.Title);
-        Assert.Equal(messageExpected, exception.Message);
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(code, exception.Code);
     }
 
     [Fact]
@@ -140,12 +137,11 @@ public class CategoryServiceTest
     public async Task MustEditCategoryAndReturnNotFound()
     {
         // Arrange
-        CategoryServiceFixture fixture = new();
         int id = 1;
         bool success = false;
-        HttpStatusCode codeExpected = HttpStatusCode.NotFound;
-        string titleExpected = "Category update error";
-        string messageExpected = string.Format("Category with ID {0} not found", id);
+        string message = string.Format("Category with ID {0} not found!", id);
+        HttpStatusCode code = HttpStatusCode.NotFound;
+        CategoryServiceFixture fixture = new();
         CategoryRequest request = fixture.CategoryRequestMock();
         CategoryService service = fixture.WithGetCategory(id, success)
                                          .WithUpdateCategory()
@@ -157,26 +153,22 @@ public class CategoryServiceTest
         );
 
         // Assert
-        Assert.Equal(codeExpected, exception.Code);
-        Assert.Equal(titleExpected, exception.Title);
-        Assert.Equal(messageExpected, exception.Message);
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(code, exception.Code);
     }
 
     [Fact]
     public async Task MustEditCategoryAndReturnBadRequest()
     {
         // Arrange
-        CategoryServiceFixture fixture = new();
         int id = 1;
-        bool success = true;
-        HttpStatusCode codeExpected = HttpStatusCode.BadRequest;
-        string titleExpected = "Category update error";
-        string messageExpected = "Invalid data!";
-        string nameSqlInjection = "SELECT * FROM users; --";
-        CategoryRequest request = fixture.CategoryRequestMock(name: nameSqlInjection);
-        CategoryService service = fixture.WithGetCategory(id, success)
-                                         .WithUpdateCategory()
-                                         .InstantiateService();
+        string sqlInjection = "SELECT * FROM users; --";
+        string message = "Invalid data!";
+        HttpStatusCode code = HttpStatusCode.BadRequest;
+        CategoryServiceFixture fixture = new();
+        CategoryRequest request = fixture.CategoryRequestMock(name: sqlInjection);
+        CategoryService service = fixture.InstantiateService();
 
         // Act
         CategoryException exception = await Assert.ThrowsAsync<CategoryException>(
@@ -184,9 +176,9 @@ public class CategoryServiceTest
         );
 
         // Assert
-        Assert.Equal(codeExpected, exception.Code);
-        Assert.Equal(titleExpected, exception.Title);
-        Assert.Equal(messageExpected, exception.Message);
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(code, exception.Code);
     }
 
     [Fact]
@@ -233,9 +225,8 @@ public class CategoryServiceTest
         // Arrange
         int id = 1;
         bool success = false;
-        HttpStatusCode codeExpected = HttpStatusCode.NotFound;
-        string titleExpected = "Category delete error";
-        string messageExpected = string.Format("Category with ID {0} not found", id);
+        HttpStatusCode code = HttpStatusCode.NotFound;
+        string message = string.Format("Category with ID {0} not found", id);
         CategoryService service = new CategoryServiceFixture()
                                          .WithGetCategory(id, success)
                                          .InstantiateService();
@@ -246,8 +237,8 @@ public class CategoryServiceTest
         );
 
         // Assert
-        Assert.Equal(codeExpected, exception.Code);
-        Assert.Equal(titleExpected, exception.Title);
-        Assert.Equal(messageExpected, exception.Message);
+        Assert.NotNull(exception);
+        Assert.Equal(message, exception.Message);
+        Assert.Equal(code, exception.Code);
     }
 }

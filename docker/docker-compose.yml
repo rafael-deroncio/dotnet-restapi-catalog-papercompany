@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  database-catalog:
+    image: postgres:latest
+    volumes:
+      - ./pappercompany-catalog-create.sql:/docker-entrypoint-initdb.d/pappercompany-catalog-create.sql
+      - ./pappercompany-catalog-insert.sql:/docker-entrypoint-initdb.d/pappercompany-catalog-insert.sql
+    container_name: service-catalog
+    restart: always
+    environment:
+      POSTGRES_DB: DBCATALOG
+      POSTGRES_USER: dundermifflin
+      POSTGRES_PASSWORD: Tgdr#5323
+    ports:
+      - "5433:5432"

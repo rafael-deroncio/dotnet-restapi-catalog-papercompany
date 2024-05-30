@@ -12,7 +12,7 @@ public class CategoryResponse
     /// This property maps to the JSON property 'id'.
     /// </summary>
     [JsonPropertyName("id")]
-    public string CategoryId { get; set; }
+    public int CategoryId { get; set; }
 
     /// <summary>
     /// Gets or sets the name of the category.

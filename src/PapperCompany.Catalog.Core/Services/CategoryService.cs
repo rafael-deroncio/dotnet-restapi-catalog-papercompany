@@ -149,7 +149,7 @@ public class CategoryService(
             if (await _categoryRepository.GetCategory(id) == null)
                 throw new CategoryException(
                     title: "Category update error",
-                    message: string.Format("Category with ID {0} not found", id),
+                    message: string.Format("Category with ID {0} not found!", id),
                     code: HttpStatusCode.NotFound
                 );
 

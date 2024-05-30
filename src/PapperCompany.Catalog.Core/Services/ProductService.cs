@@ -102,7 +102,7 @@ public class ProductService(
                 throw new ProductException(
                     title: "Product create error",
                     message: string.Format("Product category with ID {0} not found!", request.CategoryId),
-                    code: HttpStatusCode.BadRequest);
+                    code: HttpStatusCode.NotFound);
 
             ProductArgument argument = _mapper.Map<ProductArgument>(request);
             argument.Name = request.Name.ToCamelCase();
@@ -145,13 +145,13 @@ public class ProductService(
             ProductModel product = await _productRepository.GetProduct(id) ?? throw new ProductException(
                     title: "Product update error",
                     message: string.Format("Product with ID {0} not found!", id),
-                    code: HttpStatusCode.BadRequest);
+                    code: HttpStatusCode.NotFound);
 
             if (await _categoryService.GetCategory(request.CategoryId) == null)
                 throw new ProductException(
                     title: "Product update error",
                     message: string.Format("Product category with ID {0} not found!", request.CategoryId),
-                    code: HttpStatusCode.BadRequest);
+                    code: HttpStatusCode.NotFound);
 
             ProductArgument argument = _mapper.Map<ProductArgument>(request);
             argument.Name = request.Name.ToCamelCase();
@@ -191,7 +191,7 @@ public class ProductService(
                 throw new ProductException(
                     title: "Product update error",
                     message: string.Format("Product with ID {0} not found!", id),
-                    code: HttpStatusCode.BadRequest);
+                    code: HttpStatusCode.NotFound);
 
             return await _productRepository.DeleteProduct(id);
         }

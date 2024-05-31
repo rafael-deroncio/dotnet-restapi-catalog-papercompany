@@ -112,8 +112,13 @@ builder.Configuration.AddSecrets();
 ### Running the Project
 
 1. Clone the repository.
-2. Navigate to the `PapperCompany.Catalog.API` directory.
-3. Ensure `secrets.yaml` is correctly configured.
+2. Run docker.
+```bash
+docker-compose up -d
+```
+4. Navigate to the `PapperCompany.Catalog.API` directory.
+5. Ensure `secrets.yaml` is correctly configured.
+6. Run API.
 ```bash
 dotnet run
 ```

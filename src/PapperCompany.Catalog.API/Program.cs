@@ -53,7 +53,7 @@ app.UseApiVersioning();
 
 app.UseSwagger(builder.Configuration);
 
-app.UseGlobalHandlerException();
+app.UseGlobalExceptionHandler();
 
 app.UseHttpsRedirection();
 

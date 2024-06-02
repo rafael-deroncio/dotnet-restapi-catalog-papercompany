@@ -1,5 +1,5 @@
-﻿using PapperCompany.Catalog.API.Settings;
-using PapperCompany.Catalog.Core.Middlewares;
+﻿using PapperCompany.Catalog.API.Middlewares;
+using PapperCompany.Catalog.API.Settings;
 
 namespace PapperCompany.Catalog.API.Extensions;
 
@@ -38,7 +38,7 @@ public static class ApplicationBuilderExtensions
         return builder;
     }
 
-    public static IApplicationBuilder UseGlobalHandlerException(this IApplicationBuilder builder)
+    public static IApplicationBuilder UseGlobalExceptionHandler(this IApplicationBuilder builder)
     {
         // Add Middleware Handler Exception Global
         builder.UseMiddleware<GlobalHandlerExceptionMiddleware>();

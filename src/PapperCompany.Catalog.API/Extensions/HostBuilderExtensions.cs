@@ -11,8 +11,8 @@ public static class HostBuilderExtensions
         hostBuilder.UseSerilog((context, config) =>
             config.MinimumLevel.Information()
                   .MinimumLevel.ControlledBy(LoggingLevelSwitcher._instance)
-                  .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Error)
-                  .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Error)
+                //   .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Error)
+                //   .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Error)
                   .Enrich.With(new CustomEnricher(context.Configuration["AppDetails:Name"]))
                   .Enrich.WithProperty("Application", context.Configuration["ApplicationName"])
                   .Enrich.WithProperty("Envioroment", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))

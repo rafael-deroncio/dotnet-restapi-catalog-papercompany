@@ -1,10 +1,11 @@
 ﻿using System.Net;
 using System.Text.Json;
+using PapperCompany.Catalog.Core;
 using PapperCompany.Catalog.Core.Exceptions;
 using PapperCompany.Catalog.Core.Extensions;
-using PapperCompany.Catalog.Core.Responses;
+using PapperCompany.Catalog.Domain.Responses;
 
-namespace PapperCompany.Catalog.Core.Middlewares;
+namespace PapperCompany.Catalog.API.Middlewares;
 
 public class GlobalHandlerExceptionMiddleware
 {

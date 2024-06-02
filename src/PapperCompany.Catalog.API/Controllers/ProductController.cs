@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PapperCompany.Catalog.Core.Responses;
 using PapperCompany.Catalog.Core.Services.Interfaces;
 using PapperCompany.Catalog.Domain.Requests;
 using PapperCompany.Catalog.Domain.Responses;

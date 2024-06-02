@@ -1,4 +1,4 @@
-﻿namespace PapperCompany.Catalog.Core.Responses;
+﻿namespace PapperCompany.Catalog.Domain.Responses;
 
 public class ExceptionResponse
 {

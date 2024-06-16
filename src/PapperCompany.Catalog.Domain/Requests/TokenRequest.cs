@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace PapperCompany.Catalog.Domain;
+namespace PapperCompany.Catalog.Domain.Requests;
 
 public class TokenRequest
 {
@@ -16,5 +16,4 @@ public class TokenRequest
 
     [Required(ErrorMessage = "The user field is required")]
     public IEnumerable<string> Claims { get; set; }
-
 }

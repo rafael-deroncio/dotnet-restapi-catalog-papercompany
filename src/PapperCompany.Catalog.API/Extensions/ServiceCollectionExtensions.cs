@@ -185,6 +185,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IPaginationService, PaginationService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         // Service URI
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

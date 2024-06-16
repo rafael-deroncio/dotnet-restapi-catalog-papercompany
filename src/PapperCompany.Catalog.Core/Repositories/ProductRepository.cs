@@ -111,7 +111,7 @@ public class ProductRepository(
                 transaction: null,
                 buffered: true,
                 splitOn: "CategoryId",
-                types: [typeof(CategoryModel), typeof(ProductModel)],
+                types: [typeof(ProductModel), typeof(CategoryModel)],
                 map: obj =>
                     {
                         ProductModel temp;
